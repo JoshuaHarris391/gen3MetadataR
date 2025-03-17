@@ -1,1 +1,1 @@
-from .parser import *
+from .gen3_metadata_parser import *

@@ -18,7 +18,7 @@ class Gen3MetadataParser:
         """
         self.api_url = api_url
         self.key_file_path = key_file_path
-        self.headers = self._authenticate()
+        self.headers = {}
         self.data_store = {}
         self.data_store_pd = {}
 
@@ -32,7 +32,7 @@ class Gen3MetadataParser:
         with open(self.key_file_path) as json_file:
             return json.load(json_file)
 
-    def _authenticate(self) -> dict:
+    def authenticate(self) -> dict:
         """
         Authenticates with the Gen3 API using the loaded API key.
 
@@ -46,7 +46,8 @@ class Gen3MetadataParser:
             )
             response.raise_for_status()
             access_token = response.json()['access_token']
-            return {'Authorization': f"bearer {access_token}"}
+            self.headers = {'Authorization': f"bearer {access_token}"}
+            return print(f"Authentication successful: {response.status_code}")
         except requests.exceptions.HTTPError as http_err:
             print(
                 f"HTTP error occurred during authentication: {http_err} - "
@@ -65,7 +66,7 @@ class Gen3MetadataParser:
             print(f"An unexpected error occurred during authentication: {err}")
             raise
 
-    def json_to_pdf(self, json_data) -> pd.DataFrame:
+    def json_to_pd(self, json_data) -> pd.DataFrame:
         """
         Converts JSON data to a pandas DataFrame.
 
@@ -117,8 +118,10 @@ class Gen3MetadataParser:
                 f"HTTP error occurred: {http_err} - "
                 f"Status Code: {response.status_code}"
             )
+            raise
         except Exception as err:
             print(f"An error occurred: {err}")
+            raise 
 
     def data_to_pd(self) -> None:
         """
@@ -126,5 +129,5 @@ class Gen3MetadataParser:
         """
         for key, value in self.data_store.items():
             print(f"Converting {key} to pandas dataframe...")
-            self.data_store_pd[key] = self.json_to_pdf(value['data'])
+            self.data_store_pd[key] = self.json_to_pd(value['data'])
         return
