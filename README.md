@@ -62,3 +62,13 @@ This allows for easy access and manipulation of the data after it has been fetch
 
 
 
+## 5. Running Tests
+
+The tests are written using the `pytest` framework. 
+
+```bash
+pytest tests/
+```
+
+
+
