@@ -33,6 +33,9 @@ key_file = os.getenv('credentials_path')
 # Initialize the Gen3MetadataParser
 gen3metadata = Gen3MetadataParser(api, key_file)
 
+# authenticate
+gen3metadata.authenticate()
+
 # Fetch data for different categories
 gen3metadata.fetch_data("program1", "AusDiab_Simulated", "subject")
 gen3metadata.fetch_data("program1", "AusDiab_Simulated", "demographic")
