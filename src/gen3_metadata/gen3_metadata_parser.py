@@ -1,6 +1,7 @@
 import json
 import requests
 import pandas as pd
+import jwt
 
 
 class Gen3MetadataParser:
@@ -8,15 +9,13 @@ class Gen3MetadataParser:
     A class to interact with Gen3 metadata API for fetching and processing data.
     """
 
-    def __init__(self, api_url, key_file_path):
+    def __init__(self, key_file_path):
         """
         Initializes the Gen3MetadataParser with API URL and key file path.
 
         Args:
-            api_url (str): The base URL of the Gen3 API.
             key_file_path (str): The file path to the JSON key file for authentication.
         """
-        self.api_url = api_url
         self.key_file_path = key_file_path
         self.headers = {}
         self.data_store = {}
@@ -32,6 +31,21 @@ class Gen3MetadataParser:
         with open(self.key_file_path) as json_file:
             return json.load(json_file)
 
+    def _url_from_jwt(self, cred: dict) -> str:
+        """
+        Extracts the URL from a JSON Web Token (JWT) credential.
+
+        Args:
+            cred (dict): The JSON Web Token (JWT) credential.
+
+        Returns:
+            str: The extracted URL.
+        """
+        jwt_token = cred['api_key']
+        url = jwt.decode(jwt_token, options={"verify_signature": False}).get('iss', '').removesuffix("/user")
+        return url
+
+
     def authenticate(self) -> dict:
         """
         Authenticates with the Gen3 API using the loaded API key.
@@ -41,8 +55,9 @@ class Gen3MetadataParser:
         """
         try:
             key = self._load_api_key()
+            api_url = self._url_from_jwt(key)
             response = requests.post(
-                f"{self.api_url}/user/credentials/cdis/access_token", json=key
+                f"{api_url}/user/credentials/cdis/access_token", json=key
             )
             response.raise_for_status()
             access_token = response.json()['access_token']
@@ -97,8 +112,10 @@ class Gen3MetadataParser:
             dict or None: The fetched data if return_data is True, otherwise None.
         """
         try:
+            creds = self._load_api_key()
+            api_url = self._url_from_jwt(creds)
             url = (
-                f"{self.api_url}/api/{api_version}/submission/{program_name}/{project_code}/"
+                f"{api_url}/api/{api_version}/submission/{program_name}/{project_code}/"
                 f"export/?node_label={node_label}&format=json"
             )
             response = requests.get(url, headers=self.headers)
@@ -121,7 +138,7 @@ class Gen3MetadataParser:
             raise
         except Exception as err:
             print(f"An error occurred: {err}")
-            raise 
+            raise
 
     def data_to_pd(self) -> None:
         """
