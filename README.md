@@ -26,12 +26,11 @@ pip install -e .
 import os
 from gen3_metadata.parser import Gen3MetadataParser
 
-# Set up API and credentials
-api = "https://data.test.biocommons.org.au"
+# Set up credentials path
 key_file = os.getenv('credentials_path')
 
 # Initialize the Gen3MetadataParser
-gen3metadata = Gen3MetadataParser(api, key_file)
+gen3metadata = Gen3MetadataParser(key_file)
 
 # authenticate
 gen3metadata.authenticate()
