@@ -3,3 +3,4 @@ pandas
 setuptools
 pytest
 PyJWT
+ipykernal
