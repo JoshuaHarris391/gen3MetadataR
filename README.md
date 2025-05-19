@@ -25,7 +25,10 @@ pip install -e .
 ```python
 import os
 from gen3_metadata.parser import Gen3MetadataParser
+from dotenv import load_dotenv
 
+load_dotenv()
+key_file = os.getenv('credentials_path')
 # Set up credentials path
 key_file = os.getenv('credentials_path')
 
