@@ -20,6 +20,18 @@ pip install -e .
 ```
 
 
+## Alternatively you can build using:
+```bash
+bash build.sh
+```
+
+# Usage
+
+## 4. Run the notebook
+- Notebook can be found in the `example_notebook.ipynb` file
+- Make sure to select .venv as the kernel in the notebook
+
+
 ## 4. Usage Example
 
 ```python
