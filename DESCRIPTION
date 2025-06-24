@@ -1,0 +1,20 @@
+Package: gen3MetadataR
+Title: User-Friendly Tools for Downloading and Manipulating Gen3 Metadata
+Version: 1.0.0
+Authors@R: 
+    person("Joshua", "Harris", email = "harjo391@gmail.com", role = c("aut", "cre"))
+Description: Provides user-friendly tools for downloading, parsing, and manipulating metadata from Gen3 data commons within R. 
+    The package enables authentication, fetching of metadata across different categories, and conversion of metadata into R data frames 
+    for downstream analysis. Designed to simplify integration of Gen3 metadata into R-based workflows for bioinformatics and data science.
+License: MIT
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+    base64enc,
+    httr2,
+    jose,
+    jsonlite,
+    magrittr,
+    R6,
+    stringr
