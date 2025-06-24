@@ -1,7 +1,0 @@
-requests
-pandas
-setuptools
-pytest
-PyJWT
-ipykernel
-dotenv
